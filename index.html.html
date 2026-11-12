@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="德语C1">
+<title>德语C1填空 ✿</title>
+<style>
+:root{--bg:#ece5dc;--card:#f7f3ed;--ink:#5e5752;--sub:#9a918a;--rose:#d9b8b0;--sage:#b3c0aa;--blue:#a9b9c4;--sand:#e3d6c0;--line:#e0d7cb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#2b2826;--card:#38342f;--ink:#e6dfd6;--sub:#a79e94;--rose:#8c6c66;--sage:#6f7d68;--blue:#6a7b86;--sand:#6b604c;--line:#4a453e}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;display:flex;justify-content:center;padding:18px 14px}
+.wrap{width:100%;max-width:420px}
+h1{font-size:17px;text-align:center;margin:4px 0 12px;font-weight:600;letter-spacing:1px}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--sage);border-radius:8px;transition:width .4s}
+.cnt{font-size:12px;color:var(--sub);text-align:right;margin:5px 4px 10px}
+.card{background:var(--card);border-radius:22px;padding:22px 18px;box-shadow:0 4px 14px rgba(120,105,90,.12);position:relative}
+.tag{display:inline-block;background:var(--sand);border-radius:10px;padding:2px 10px;font-size:11px;margin-bottom:12px}
+.q{font-size:19px;line-height:1.6;margin:0 0 16px}
+.blank{display:inline-block;min-width:52px;border-bottom:2px dashed var(--rose);text-align:center;color:var(--rose);font-weight:600}
+.blank.ok{color:var(--ink);border-color:var(--sage)}
+.opts{display:grid;gap:8px}
+.o{display:flex;align-items:center;gap:10px;border:0;background:var(--bg);color:var(--ink);font:inherit;font-size:15px;padding:7px 12px 7px 8px;border-radius:999px;text-align:left;cursor:pointer}
+.o b{width:24px;height:24px;border-radius:50%;background:var(--blue);display:grid;place-items:center;font-size:12px;color:#fff;flex:none}
+.o.right{background:var(--sage)}.o.right b{background:#fff;color:var(--ink)}
+.o.wrong{background:var(--rose)}.o.wrong b{background:#fff;color:var(--ink)}
+.o:active{transform:scale(.97)}
+.fb{margin-top:14px;background:var(--bg);border-radius:16px;padding:11px 14px;font-size:14px;line-height:1.6;display:none}
+.fb p{margin:0}.fb .h{font-weight:600;margin-bottom:3px}
+.next{display:none;margin:14px 0 0 auto;border:0;background:var(--rose);color:#fff;font:inherit;font-size:14px;padding:7px 18px;border-radius:999px;cursor:pointer}
+.next:active{transform:scale(.95)}
+.end{text-align:center;padding:14px 0}.end .big{font-size:44px}.end h2{margin:6px 0;font-size:20px}.end p{color:var(--sub);margin:4px 0 12px}
+.end .next{display:inline-block;margin:0}
+.sum{display:flex;gap:8px;justify-content:center;margin:12px 0}.sum div{background:var(--bg);border-radius:16px;padding:8px 12px;font-size:12px;color:var(--sub);min-width:76px}.sum b{display:block;font-size:22px;color:var(--ink)}.sum div:nth-child(1) b{color:var(--sage)}.sum div:nth-child(2) b{color:var(--rose)}
+</style></head><body><div class="wrap">
+<h1>☁️ Deutsch · C1 填空小练习 🌿</h1>
+<div class="bar"><i id="bar"></i></div><div class="cnt" id="cnt"></div>
+<div class="card" id="card"></div>
+</div>
+<script>
+const Q=[
+["Er ließ sich nicht ___ abbringen, sein Ziel zu verfolgen.","davon","dafür","darum","dazu","abbringen 搭配 von，故用 davon。"],
+["Das Projekt scheiterte ___ der fehlenden Finanzierung.","an","aus","bei","von","scheitern an + 三格：因…而失败。"],
+["___ des schlechten Wetters fand das Fest statt.","Trotz","Wegen","Dank","Statt","trotz + 二格，表示“尽管”。"],
+["Er tat so, ___ er nichts gehört hätte.","als ob","obwohl","damit","sodass","so tun, als ob + 虚拟式II：假装。"],
+["Hätte ich das gewusst, ___ ich anders entschieden.","hätte","habe","hatte","wäre","省略 wenn 的非现实条件句，主句用 hätte entschieden。"],
+["Der Antrag wurde unter Hinweis ___ die Frist abgelehnt.","auf","an","für","über","Hinweis auf + 四格。"],
+["Die Preise sind ___ gestiegen, dass sich viele es nicht mehr leisten können.","so stark","sehr stark","ziemlich","genauso","so … dass …：如此…以至于。"],
+["Er bestritt, den Brief ___ zu haben.","gelesen","lesen","las","liest","完成式不定式：gelesen zu haben。"],
+["Sie ist die Frau, ___ ich meine Karriere verdanke.","der","die","deren","den","verdanken + 三格，关系代词用 der。"],
+["Die Studie, ___ Ergebnisse veröffentlicht wurden, ist umstritten.","deren","dessen","die","welche","Studie 为阴性，二格关系代词用 deren。"],
+["Er rechnet ___, dass der Zug Verspätung hat.","damit","darauf","dafür","davon","rechnen mit → damit。"],
+["Sie legt großen Wert ___ Pünktlichkeit.","auf","an","für","zu","Wert legen auf + 四格。"],
+["Nachdem er das Studium ___ hatte, zog er nach Berlin.","abgeschlossen","abschließen","abgeschloss","abgeschlossene","过去完成时：abgeschlossen hatte。"],
+["Der Chef, ___ ich gestern gesprochen habe, ist sehr nett.","mit dem","mit den","dem","den","sprechen mit + 三格，阳性用 mit dem。"],
+["Die Sitzung wurde auf nächste Woche ___.","verschoben","verschob","verschieben","verschiebt","被动态：wurde + 过去分词。"],
+["Er ist nicht nur klug, ___ auch fleißig.","sondern","aber","doch","außer","nicht nur … sondern auch。"],
+["Aufgrund ___ Krankheit musste sie absagen.","ihrer","ihre","ihr","ihren","aufgrund + 二格，Krankheit 为阴性。"],
+["Man sollte nicht alles glauben, ___ in der Zeitung steht.","was","das","welches","wo","alles 之后的关系代词用 was。"],
+["Er ist es gewohnt, früh ___.","aufzustehen","aufstehen","aufgestanden","auf zustehen","可分动词的 zu 插在中间：aufzustehen。"],
+["Sie hat die Prüfung bestanden, ___ sie kaum gelernt hatte.","obwohl","indem","sodass","falls","obwohl 表让步：尽管。"],
+["Der Vertrag tritt ___ 1. Januar in Kraft.","am","im","um","zum","具体日期前用 am。"],
+["Der Mann wurde des Diebstahls ___.","angeklagt","angeklagte","anklagen","anzuklagen","被动态用过去分词：angeklagt。"],
+["Ich bin ___ überzeugt, dass sie recht hat.","davon","dafür","darauf","darum","überzeugt sein von → davon。"],
+["Wenn er mehr Zeit ___, würde er öfter reisen.","hätte","hat","hatte","haben","非现实条件句用虚拟式II：hätte。"],
+["Er ist der Ansicht, ___ das Projekt scheitern wird.","dass","das","was","ob","引导内容从句用 dass。"],
+["Sie interessiert sich ___ Kunstgeschichte.","für","an","auf","über","sich interessieren für。"],
+["Das Wetter war nicht so schlecht, ___ wir befürchtet hatten.","wie","als","dass","ob","nicht so … wie：不如…那样。"],
+["Je länger ich darüber nachdenke, ___ weniger verstehe ich es.","desto","je","so","dann","je … desto …：越…越…。"],
+["Die Teilnehmer wurden gebeten, ihre Handys ___.","auszuschalten","ausschalten","ausgeschaltet","auszuschaltet","可分动词的 zu 不定式：auszuschalten。"],
+["Er konnte der Versuchung nicht ___.","widerstehen","widerstanden","zu widerstehen","widersteht","情态动词 + 动词原形。"],
+["Die Firma sieht sich ___ Vorwürfen ausgesetzt.","den","die","der","dem","ausgesetzt sein + 三格复数：den。"],
+["Trotz ___ Warnung ging er weiter.","der","die","dem","den","trotz + 二格，Warnung 为阴性：der。"],
+["Er entschied sich ___ den Umzug.","für","zu","an","bei","sich entscheiden für。"],
+["Ich habe mich ___ Anfang an geirrt.","von","ab","seit","aus","固定搭配：von Anfang an。"],
+["Sie ist stolz ___ ihre Kinder.","auf","für","über","an","stolz sein auf + 四格。"],
+["Die Ergebnisse stimmen mit den Erwartungen ___.","überein","zusammen","gleich","mit","übereinstimmen 是可分动词。"],
+["Sie setzt sich aktiv ___ den Umweltschutz ein.","für","an","zu","auf","sich einsetzen für。"],
+["Das Buch, ___ ich gestern gekauft habe, ist spannend.","das","dass","was","dem","Buch 为中性，四格关系代词用 das。"],
+["Er sagte, er ___ krank.","sei","ist","bin","war","间接引语用虚拟式I：sei。"],
+["Der Minister erklärte, er ___ keine Fehler gemacht.","habe","hat","hatte","haben","间接引语用虚拟式I：habe。"],
+["Dank ___ Hilfe konnte ich das Problem lösen.","seiner","seine","sein","seinen","dank + 二/三格，Hilfe 为阴性：seiner。"],
+["Er bemüht sich ___, pünktlich zu sein.","darum","daran","damit","dazu","sich bemühen um → darum。"],
+["Es kommt ___ an, wie man es betrachtet.","darauf","davon","dazu","damit","es kommt auf … an → darauf。"],
+["Er hat das Auto ___ lassen.","reparieren","repariert","zu reparieren","reparierte","lassen 前用动词原形（替代不定式）。"],
+["Wir sind dabei, ein neues System ___.","einzuführen","einführen","eingeführt","einführte","dabei sein, … zu：正在做某事。"],
+["Der Arzt riet ihr, mehr ___.","zu schlafen","schlafen","geschlafen","schläft","raten 后接 zu + 不定式。"],
+["Sie tat es, ___ ihm zu helfen.","um","für","damit","zu","um … zu：表示目的（主语相同）。"],
+["Das Ergebnis fiel besser ___ erwartet aus.","als","wie","denn","so","比较级之后用 als。"],
+["Er hat mir davon ___, den Vertrag zu unterschreiben.","abgeraten","geraten","geriet","abraten","abraten von：劝阻，完成时 abgeraten。"],
+["Wir haben uns ___ geeinigt, den Termin zu verschieben.","darauf","dazu","davon","darüber","sich einigen auf → darauf。"]
+];
+let i=0,sc=0,done=false;
+const $=id=>document.getElementById(id),L="ABCD";
+function render(){
+ if(i>=Q.length)return end();
+ done=false;const q=Q[i];
+ const o=[q[1],q[2],q[3],q[4]].map(t=>({t,ok:t===q[1]})).sort(()=>Math.random()-.5);
+ $("bar").style.width=(i/Q.length*100)+"%";$("cnt").textContent=(i+1)+" / "+Q.length;
+ $("card").innerHTML='<span class="tag">🌸 第 '+(i+1)+' 题</span><p class="q">'+q[0].replace("___",'<span class="blank" id="bl">&nbsp;&nbsp;?&nbsp;&nbsp;</span>')+'</p><div class="opts">'+
+ o.map((x,k)=>'<button class="o" data-k="'+k+'"><b>'+L[k]+'</b>'+x.t+'</button>').join("")+'</div><div class="fb" id="fb"></div><button class="next" id="nx">下一步 →</button>';
+ document.querySelectorAll(".o").forEach((b,k)=>b.onclick=()=>pick(b,o,k,q));
+ $("nx").onclick=()=>{i++;render()};
+}
+function pick(b,o,k,q){
+ if(done)return;done=true;
+ const ok=o[k].ok;if(ok)sc++;
+ document.querySelectorAll(".o").forEach((e,j)=>{if(o[j].ok)e.classList.add("right");else if(j===k)e.classList.add("wrong")});
+ $("bl").textContent=q[1];$("bl").classList.add("ok");
+ const f=$("fb");f.style.display="block";
+ f.innerHTML='<p class="h">'+(ok?"答对啦 ✿":"没关系，下次一定 ☁️")+'</p><p>正确答案：<b>'+q[1]+'</b></p><p>'+q[5]+'</p>';
+ $("nx").style.display="block";$("nx").textContent=i===Q.length-1?"看结果 ✿":"下一步 →";
+}
+function end(){
+ $("bar").style.width="100%";$("cnt").textContent=Q.length+" / "+Q.length;
+ const pct=Math.round(sc/Q.length*100),m=pct>=90?"太棒啦，C1 稳稳的！":pct>=60?"很不错，继续加油！":"慢慢来，多练几遍就好～";
+ $("card").innerHTML='<div class="end"><div class="big">🌷</div><h2>练习总结</h2><div class="sum"><div><b>'+sc+'</b>答对</div><div><b>'+(Q.length-sc)+'</b>答错</div><div><b>'+pct+'%</b>正确率</div></div><p>共 '+Q.length+' 题，答对 '+sc+' 题，占总题数的 '+pct+'%。</p><p>'+m+'</p><button class="next" id="re">再来一次</button></div>';
+ $("re").onclick=()=>{i=0;sc=0;render()};
+}
+render();
+</script></body></html>
