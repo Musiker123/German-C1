@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="德语A2">
+<title>德语A2填空 ✿</title>
+<style>
+:root{--bg:#ece5dc;--card:#f7f3ed;--ink:#5e5752;--sub:#9a918a;--rose:#d9b8b0;--sage:#b3c0aa;--blue:#a9b9c4;--sand:#e3d6c0;--line:#e0d7cb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#2b2826;--card:#38342f;--ink:#e6dfd6;--sub:#a79e94;--rose:#8c6c66;--sage:#6f7d68;--blue:#6a7b86;--sand:#6b604c;--line:#4a453e}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;display:flex;justify-content:center;padding:18px 14px}
+.wrap{width:100%;max-width:420px}
+h1{font-size:17px;text-align:center;margin:4px 0 12px;font-weight:600;letter-spacing:1px}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--sage);border-radius:8px;transition:width .4s}
+.cnt{font-size:12px;color:var(--sub);text-align:right;margin:5px 4px 10px}
+.card{background:var(--card);border-radius:22px;padding:22px 18px;box-shadow:0 4px 14px rgba(120,105,90,.12)}
+.tag{display:inline-block;background:var(--sand);border-radius:10px;padding:2px 10px;font-size:11px;margin-bottom:12px}
+.q{font-size:19px;line-height:1.6;margin:0 0 16px}
+.blank{display:inline-block;min-width:52px;border-bottom:2px dashed var(--rose);text-align:center;color:var(--rose);font-weight:600}
+.blank.ok{color:var(--ink);border-color:var(--sage)}
+.opts{display:grid;gap:8px}
+.o{display:flex;align-items:center;gap:10px;border:0;background:var(--bg);color:var(--ink);font:inherit;font-size:15px;padding:7px 12px 7px 8px;border-radius:999px;text-align:left;cursor:pointer}
+.o b{width:24px;height:24px;border-radius:50%;background:var(--blue);display:grid;place-items:center;font-size:12px;color:#fff;flex:none}
+.o.right{background:var(--sage)}.o.right b{background:#fff;color:var(--ink)}
+.o.wrong{background:var(--rose)}.o.wrong b{background:#fff;color:var(--ink)}
+.o:active{transform:scale(.97)}
+.fb{margin-top:14px;background:var(--bg);border-radius:16px;padding:11px 14px;font-size:14px;line-height:1.6;display:none}
+.fb p{margin:0}.fb .h{font-weight:600;margin-bottom:3px}
+.next{display:none;margin:14px 0 0 auto;border:0;background:var(--rose);color:#fff;font:inherit;font-size:14px;padding:7px 18px;border-radius:999px;cursor:pointer}
+.next:active{transform:scale(.95)}
+.end{text-align:center;padding:14px 0}.end .big{font-size:44px}.end h2{margin:6px 0;font-size:20px}.end p{color:var(--sub);margin:4px 0 12px}
+.end .next{display:inline-block;margin:0}
+.sum{display:flex;gap:8px;justify-content:center;margin:12px 0}.sum div{background:var(--bg);border-radius:16px;padding:8px 12px;font-size:12px;color:var(--sub);min-width:76px}.sum b{display:block;font-size:22px;color:var(--ink)}.sum div:nth-child(1) b{color:var(--sage)}.sum div:nth-child(2) b{color:var(--rose)}
+</style></head><body><div class="wrap">
+<h1>☁️ Deutsch · A2 填空小练习 🌿</h1>
+<div class="bar"><i id="bar"></i></div><div class="cnt" id="cnt"></div>
+<div class="card" id="card"></div>
+</div>
+<script>
+const Q=[
+["Ich ___ jeden Morgen um sieben Uhr auf.","stehe","steht","stehst","stehen","aufstehen 是可分动词，ich 对应 stehe，auf 放在句末。"],
+["Gestern ___ ich ins Kino gegangen.","bin","habe","war","hat","表示移动的动词（gehen）的完成时用 sein：bin gegangen。"],
+["Ich fahre ___ dem Bus zur Arbeit.","mit","von","bei","aus","乘坐交通工具用 mit + 三格。"],
+["Wir warten ___ den Bus.","auf","an","für","über","warten auf + 四格：等待某物。"],
+["Ich bleibe zu Hause, weil ich krank ___.","bin","ist","habe","werde","weil 从句动词放句末，ich 对应 bin。"],
+["Mein Bruder ist größer ___ ich.","als","wie","denn","so","比较级之后用 als：比…更高。"],
+["Kannst du mir bitte ___?","helfen","hilfst","geholfen","helfe","情态动词 kannst + 动词原形 helfen。"],
+["Das ist mein Bruder. Ich gebe ___ das Buch.","ihm","ihn","er","sein","geben + 三格：给他，用 ihm。"],
+["Hast du schon ___?","gegessen","essen","aß","isst","完成时用过去分词：gegessen。"],
+["Wir ___ am Wochenende ins Schwimmbad gehen.","wollen","will","wollt","wolle","wir 对应 wollen，另一个动词 gehen 放句末。"]
+];
+let i=0,sc=0,done=false;
+const $=id=>document.getElementById(id),L="ABCD";
+function render(){
+ if(i>=Q.length)return end();
+ done=false;const q=Q[i];
+ const o=[q[1],q[2],q[3],q[4]].map(t=>({t,ok:t===q[1]})).sort(()=>Math.random()-.5);
+ $("bar").style.width=(i/Q.length*100)+"%";$("cnt").textContent=(i+1)+" / "+Q.length;
+ $("card").innerHTML='<span class="tag">🌸 第 '+(i+1)+' 题</span><p class="q">'+q[0].replace("___",'<span class="blank" id="bl">&nbsp;&nbsp;?&nbsp;&nbsp;</span>')+'</p><div class="opts">'+
+ o.map((x,k)=>'<button class="o" data-k="'+k+'"><b>'+L[k]+'</b>'+x.t+'</button>').join("")+'</div><div class="fb" id="fb"></div><button class="next" id="nx">下一步 →</button>';
+ document.querySelectorAll(".o").forEach((b,k)=>b.onclick=()=>pick(b,o,k,q));
+ $("nx").onclick=()=>{i++;render()};
+}
+function pick(b,o,k,q){
+ if(done)return;done=true;
+ const ok=o[k].ok;if(ok)sc++;
+ document.querySelectorAll(".o").forEach((e,j)=>{if(o[j].ok)e.classList.add("right");else if(j===k)e.classList.add("wrong")});
+ $("bl").textContent=q[1];$("bl").classList.add("ok");
+ const f=$("fb");f.style.display="block";
+ f.innerHTML='<p class="h">'+(ok?"答对啦 ✿":"没关系，下次一定 ☁️")+'</p><p>正确答案：<b>'+q[1]+'</b></p><p>'+q[5]+'</p>';
+ $("nx").style.display="block";$("nx").textContent=i===Q.length-1?"看结果 ✿":"下一步 →";
+}
+function end(){
+ $("bar").style.width="100%";$("cnt").textContent=Q.length+" / "+Q.length;
+ const pct=Math.round(sc/Q.length*100),m=pct>=90?"太棒啦！你的 A2 基础非常扎实，可以挑战 B1 了～":pct>=60?"很不错！再复习一下错题，你会越来越稳的～":"别灰心，每个人都是从这里开始的，多练几遍就会进步～";
+ $("card").innerHTML='<div class="end"><div class="big">🌷</div><h2>练习总结</h2><div class="sum"><div><b>'+sc+'</b>答对</div><div><b>'+(Q.length-sc)+'</b>答错</div><div><b>'+pct+'%</b>正确率</div></div><p>共 '+Q.length+' 题，答对 '+sc+' 题，占总题数的 '+pct+'%。</p><p>'+m+'</p><button class="next" id="re">再来一次</button></div>';
+ $("re").onclick=()=>{i=0;sc=0;render()};
+}
+render();
+</script></body></html>
