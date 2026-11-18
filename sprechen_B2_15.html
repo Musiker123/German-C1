@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>德语 B2–C1 口语训练｜15 道题</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--ink:#202637;--muted:#657086;--line:#e2e7ef;--accent:#3859a8;--good:#18794e;--bad:#b54747}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:820px;margin:32px auto;padding:0 16px}
+header,.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:16px;box-shadow:0 4px 18px rgba(25,35,60,.04)}
+h1{font-size:1.5rem;margin:0 0 6px} h2{font-size:1.15rem;margin:0 0 12px}
+.muted{color:var(--muted)} .progress{height:8px;background:#e9edf4;border-radius:99px;overflow:hidden;margin:14px 0}
+#bar{height:100%;width:0;background:var(--accent);transition:width .2s}
+.option{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:12px;margin:9px 0;cursor:pointer}
+.option:hover{border-color:var(--accent);background:#f8faff}
+.option input{margin-top:5px;accent-color:var(--accent)}
+.option.selected{border-color:var(--accent);background:#f3f6ff}
+button{border:0;border-radius:10px;padding:11px 18px;font-size:15px;cursor:pointer;background:var(--accent);color:white}
+button:disabled{opacity:.45;cursor:not-allowed}
+.secondary{background:#e9edf5;color:var(--ink)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+#feedback{margin-top:18px;padding:15px;border-radius:12px;background:#f4f6fa;display:none}
+#feedback.good{display:block;border-left:4px solid var(--good)}
+#feedback.bad{display:block;border-left:4px solid var(--bad)}
+#feedback h3{margin:0 0 8px;font-size:1rem}
+#feedback p{margin:7px 0}
+#result{display:none}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line);vertical-align:top}
+.small{font-size:.9rem}
+@media(max-width:560px){header,.panel{padding:17px}main{margin:16px auto}h1{font-size:1.25rem}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>德语 B2–C1 口语训练</h1>
+<div class="muted">15 道情境选择题｜每次一道｜答题后查看解析</div>
+<div class="progress"><div id="bar"></div></div>
+<div class="muted small" id="progressText">第 1 / 15 题</div>
+</header>
+<section class="panel" id="quiz">
+<h2 id="question"></h2>
+<div class="muted small" id="instruction">请选择最自然、最符合语境的表达。</div>
+<div id="options"></div>
+<div class="actions">
+<button id="checkBtn" onclick="checkAnswer()">检查答案</button>
+<button class="secondary" id="nextBtn" onclick="nextQuestion()" disabled>下一题</button>
+</div>
+<div id="feedback" aria-live="polite"></div>
+</section>
+<section class="panel" id="result">
+<h2>练习完成！</h2>
+<div id="scoreLine"></div>
+<div id="review"></div>
+<div class="actions"><button onclick="restart()">重新练习</button></div>
+</section>
+</main>
+<script>
+const questions = [
+{q:"我不想小题大做，但我觉得这种做法确实有点过分。",a:[
+"Ich möchte kein großes Ding daraus machen, aber ich finde, das geht wirklich ein bisschen zu weit.",
+"Ich möchte keine große Sache daraus machen, aber ich finde, das geht wirklich ein bisschen zu hoch.",
+"Ich möchte daraus kein großes Problem nehmen, aber ich finde, das geht wirklich ein bisschen zu weit.",
+"Ich möchte keine große Sache machen, aber ich finde, das geht wirklich ein bisschen über."
+],c:0,e:"kein großes Ding aus etwas machen = 不小题大做；Das geht zu weit = 这有点过分、越界了。注意：这里不能说 „Das geht zu hoch“。"},
+{q:"我不是故意要冒犯你，但你的说法让我有点不舒服。",a:[
+"Ich wollte dich nicht beleidigen, aber deine Aussage ist mir ein bisschen unangenehm aufgefallen.",
+"Ich wollte dir nicht zu nahe treten, aber deine Äußerung hat mich etwas irritiert.",
+"Ich wollte dich nicht verletzen, aber deine Aussage hat mich ein bisschen unbequem gemacht.",
+"Ich wollte nicht gegen dich sprechen, aber deine Worte haben mich etwas ungemütlich gemacht."
+],c:1,e:"jemandem zu nahe treten = 冒犯某人（Dativ）；jemanden irritieren = 使某人困惑或感到不自在。A 的前半句 „Ich wollte dich nicht beleidigen“ 正确，但后半句不自然。"},
+{q:"我不想直接否定你的观点，但我觉得还有其他可能性。",a:[
+"Ich möchte deine Meinung nicht direkt ablehnen, aber ich denke, es gibt noch andere Möglichkeiten.",
+"Ich möchte dir nicht widersprechen, aber ich denke, es gibt noch andere Möglichkeiten.",
+"Ich möchte deine Meinung nicht entgegenstehen, aber ich denke, es gibt noch andere Möglichkeiten.",
+"Ich möchte deine Ansicht nicht dagegen sein, aber ich denke, es gibt noch andere Möglichkeiten."
+],c:1,e:"jemandem widersprechen = 反驳某人、不同意某人，搭配 Dativ：Ich widerspreche dir. A 在语法上可以成立，但 B 更简洁、自然，也更符合委婉表达异议的语境。"},
+{q:"我不太想把这件事公开讨论，但我们确实需要解决它。",a:[
+"Ich möchte die Sache nicht öffentlich besprechen, aber wir müssen sie tatsächlich lösen.",
+"Ich möchte die Sache nicht nach außen diskutieren, aber wir müssen sie wirklich erledigen.",
+"Ich möchte die Angelegenheit nicht vor allen aussprechen, aber wir müssen sie tatsächlich bearbeiten.",
+"Ich möchte die Sache nicht öffentlich sagen, aber wir müssen sie wirklich auflösen."
+],c:0,e:"etwas öffentlich besprechen = 公开讨论某事；ein Problem / eine Angelegenheit lösen = 解决问题。lösen 强调解决问题，erledigen 通常强调完成任务或办完事情。"},
+{q:"我理解你的出发点，但我不一定认同你的结论。",a:[
+"Ich verstehe deinen Ausgangspunkt, aber ich stimme deinem Schluss nicht unbedingt zu.",
+"Ich kann deinen Ansatz nachvollziehen, aber ich teile deine Schlussfolgerung nicht unbedingt.",
+"Ich verstehe, woher du kommst, aber ich bin mit deinem Ende nicht unbedingt einverstanden.",
+"Ich kann deinen Anfang verstehen, aber ich akzeptiere dein Ergebnis nicht unbedingt."
+],c:1,alt:[0],e:"B 是更自然、适合正式讨论的表达。A 也可以理解，语法基本正确；不过 „deine Schlussfolgerung“ 比 „deinen Schluss“ 更准确。etwas nachvollziehen können = 理解某人的思路；eine Schlussfolgerung teilen = 认同某人的结论。"},
+{q:"我暂时不想对此发表评论，因为我还没有掌握全部信息。",a:[
+"Ich möchte mich dazu vorerst nicht äußern, weil mir noch nicht alle Informationen vorliegen.",
+"Ich möchte dazu momentan keine Meinung ausdrücken, weil ich noch nicht alle Informationen besitze.",
+"Ich möchte mich darüber noch nicht sprechen, weil ich nicht alle Informationen habe.",
+"Ich möchte meine Bemerkung dazu verschieben, weil mir die Informationen noch fehlen."
+],c:0,e:"sich zu etwas äußern = 对某事发表意见；jemandem liegen Informationen vor = 某人掌握／拥有某些信息。例：Mir liegen noch nicht alle Informationen vor."},
+{q:"我并不是想推卸责任，但这件事并不完全在我的掌控之中。",a:[
+"Ich möchte die Verantwortung nicht wegwerfen, aber die Sache liegt nicht ganz in meiner Kontrolle.",
+"Ich möchte mich nicht aus der Verantwortung ziehen, aber die Sache entzieht sich teilweise meiner Kontrolle.",
+"Ich möchte keine Verantwortung abgeben, aber die Sache ist nicht vollständig unter meiner Macht.",
+"Ich möchte die Verantwortung nicht vermeiden, aber die Sache steht nicht ganz in meiner Hand."
+],c:1,e:"sich aus der Verantwortung ziehen = 推卸责任；sich der Kontrolle entziehen = 超出掌控范围。注意第二个表达：Die Sache entzieht sich meiner Kontrolle."},
+{q:"我不想过早评价这件事，还是等事情进一步明朗之后再说吧。",a:[
+"Ich möchte die Sache nicht früh beurteilen, lieber warten wir, bis sie klarer wird.",
+"Ich möchte mir kein vorschnelles Urteil bilden. Warten wir lieber ab, bis sich die Lage weiter geklärt hat.",
+"Ich möchte die Sache nicht schnell bewerten, bis wir mehr Klarheit bekommen.",
+"Ich möchte kein frühes Urteil machen und warten, bis die Sache deutlicher aussieht."
+],c:1,e:"sich ein Urteil bilden = 形成判断；sich kein vorschnelles Urteil bilden = 不过早下结论；etwas abwarten = 等待、观望；sich klären = 逐渐明朗。"},
+{q:"我能理解你的担忧，但我觉得你可能有点过于悲观了。",a:[
+"Ich kann deine Sorgen verstehen, aber ich finde, du siehst die Sache vielleicht etwas zu negativ.",
+"Ich kann deine Bedenken nachvollziehen, aber ich glaube, du malst vielleicht ein etwas zu düsteres Bild.",
+"Ich kann deine Angst verstehen, aber du machst die Sache vielleicht zu dunkel.",
+"Ich verstehe deine Besorgnisse, aber du schaust vielleicht ein bisschen zu schwarz."
+],c:1,e:"Bedenken nachvollziehen = 理解某人的顾虑；ein düsteres Bild malen = 把情况描绘得很悲观。A 也自然、正确，只是 B 的比喻表达更丰富、更贴近题目所练习的 C1 口语。"},
+{q:"我不是不能接受批评，但我希望批评能够具体一些，而不是泛泛而谈。",a:[
+"Ich habe nichts gegen Kritik, aber ich wünsche mir, dass sie konkreter ist und nicht so allgemein bleibt.",
+"Ich kann Kritik nicht annehmen, aber ich möchte, dass sie genauer und nicht so breit ist.",
+"Ich bin nicht gegen die Kritik, aber ich hoffe, dass sie mehr konkret und weniger allgemein gesagt wird.",
+"Ich habe kein Problem mit Kritik, aber ich möchte, dass sie nicht so weitläufig formuliert wird."
+],c:0,e:"nichts gegen etwas haben = 不反对／不排斥某事；sich etwas wünschen = 希望得到某事。也可以说：Ich wünsche mir eine konkretere Rückmeldung.（我希望得到更具体的反馈。）"},
+{q:"我不想把事情闹大，但我也不打算就这样不了了之。",a:[
+"Ich möchte die Sache nicht größer machen, aber ich will sie auch nicht einfach so stehen lassen.",
+"Ich möchte die Sache nicht aufblasen, aber ich werde sie auch nicht einfach so aufgeben.",
+"Ich möchte keinen großen Streit machen, aber ich lasse die Sache nicht einfach so liegen bleiben.",
+"Ich möchte die Sache nicht vergrößern, aber ich möchte sie auch nicht so beenden."
+],c:0,e:"etwas nicht einfach so stehen lassen = 不打算就这样算了／不作回应。aufbauschen = 夸大、把事情闹大；etwas nicht einfach so aufgeben 则是“不轻易放弃某事”，意思不同。"},
+{q:"我并不是不愿意帮忙，只是现在确实抽不出时间。",a:[
+"Ich bin nicht dagegen, zu helfen, aber ich habe momentan wirklich keine Zeit herauszunehmen.",
+"Es liegt nicht daran, dass ich nicht helfen möchte, sondern daran, dass ich momentan einfach keine Zeit dafür habe.",
+"Ich möchte nicht meine Hilfe verweigern, aber ich kann momentan keine Zeit finden.",
+"Ich habe nichts gegen Hilfe, aber ich bin derzeit zeitlich nicht verfügbar zu nehmen."
+],c:1,e:"Es liegt nicht daran, dass …, sondern daran, dass … = 并不是因为……，而是因为……。口语中还可以说：Ich komme gerade zeitlich nicht dazu.（我现在实在抽不出时间。）"},
+{q:"我本来以为我们已经达成共识了，没想到你现在又改变了主意。",a:[
+"Ich dachte eigentlich, wir hätten uns schon geeinigt, aber jetzt hast du deine Meinung wieder geändert.",
+"Ich dachte eigentlich, wir haben schon eine Übereinstimmung gemacht, aber jetzt hast du deine Meinung verändert.",
+"Ich war der Meinung, dass wir schon zusammen entschieden haben, aber jetzt hast du deinen Gedanken gewechselt.",
+"Ich dachte, wir wären schon einverstanden geworden, aber jetzt hast du deine Ansicht umgeändert."
+],c:0,e:"sich einigen (auf + Akk.) = 达成一致；seine Meinung ändern = 改变看法。Ich habe es mir anders überlegt. 也是很自然的口语表达，意思是“我改变主意了”。"},
+{q:"我不太能接受这种说话方式，尤其是当着其他人的面。",a:[
+"Ich kann diese Art zu sprechen nicht besonders akzeptieren, besonders wenn andere Leute dabei sind.",
+"Mit dieser Art, mit mir zu reden, kann ich nicht viel anfangen, vor allem nicht vor anderen Leuten.",
+"Ich kann diese Sprechweise nicht gut vertragen, besonders wenn andere Menschen anwesend machen.",
+"Diese Art des Sprechens ist für mich nicht akzeptabel, besonders wenn andere Leute dabei stehen."
+],c:1,e:"mit etwas nicht viel anfangen können = 不太能接受／认同某事；die Art, mit jemandem zu reden = 与某人说话的方式。A 可以理解，但 B 更像自然的日常表达。"},
+{q:"我不想给你施加压力，但我希望你能尽快给我一个明确的答复。",a:[
+"Ich möchte dich nicht unter Druck setzen, aber ich hoffe, dass du mir möglichst bald eine klare Antwort gibst.",
+"Ich möchte keinen Druck auf dich machen, aber ich hoffe, dass du mir schnell eine deutliche Antwort machst.",
+"Ich will dich nicht bedrängen, aber ich erwarte, dass du mir bald eine feste Antwort sagst.",
+"Ich möchte dich nicht stressen, aber ich wünsche mir eine klare Antwort von dir so schnell wie möglich zu bekommen."
+],c:0,e:"jemanden unter Druck setzen = 给某人施加压力；jemandem Bescheid geben = 通知某人；möglichst bald = 尽可能尽快。例：Bitte gib mir möglichst bald Bescheid."}
+];
+let current=0, score=0, answers=[], checked=false;
+function render(){
+ checked=false;
+ const q=questions[current];
+ document.getElementById('question').textContent=`Aufgabe ${current+1}：${q.q}`;
+ document.getElementById('options').innerHTML=q.a.map((v,i)=>`<label class="option" id="opt${i}"><input type="radio" name="answer" value="${i}"><span><b>${"ABCD"[i]}.</b> ${v}</span></label>`).join('');
+ document.querySelectorAll('input[name="answer"]').forEach(el=>el.addEventListener('change',()=>{
+  document.querySelectorAll('.option').forEach(x=>x.classList.remove('selected'));
+  el.closest('.option').classList.add('selected');
+ }));
+ document.getElementById('feedback').style.display='none';
+ document.getElementById('feedback').className='';
+ document.getElementById('checkBtn').disabled=false;
+ document.getElementById('nextBtn').disabled=true;
+ document.getElementById('nextBtn').textContent=current===questions.length-1?'查看成绩':'下一题';
+ document.getElementById('bar').style.width=(current/questions.length*100)+'%';
+ document.getElementById('progressText').textContent=`第 ${current+1} / ${questions.length} 题`;
+}
+function checkAnswer(){
+ if(checked)return;
+ const selected=document.querySelector('input[name="answer"]:checked');
+ if(!selected){alert('请先选择一个答案。');return;}
+ checked=true;
+ const chosen=Number(selected.value), q=questions[current];
+ const correct=chosen===q.c, accepted=(q.alt||[]).includes(chosen);
+ if(correct||accepted)score++;
+ answers.push({chosen,correct:correct||accepted});
+ const fb=document.getElementById('feedback');
+ fb.className=(correct||accepted)?'good':'bad';
+ fb.style.display='block';
+ const status=correct?'回答正确！':accepted?'这个答案也可以接受！':`最佳答案是 ${"ABCD"[q.c]}。`;
+ fb.innerHTML=`<h3>${status}</h3><p><b>参考表达：</b>${q.a[q.c]}</p><p>${q.e}</p>`;
+ document.getElementById('checkBtn').disabled=true;
+ document.getElementById('nextBtn').disabled=false;
+ document.getElementById('bar').style.width=((current+1)/questions.length*100)+'%';
+}
+function nextQuestion(){
+ if(!checked)return;
+ if(current<questions.length-1){current++;render();}
+ else showResult();
+}
+function showResult(){
+ document.getElementById('quiz').style.display='none';
+ document.getElementById('result').style.display='block';
+ document.getElementById('scoreLine').innerHTML=`<p>你的得分：<b>${score} / ${questions.length}</b></p><p class="muted small">包含被标记为可接受的替代答案。</p>`;
+ let rows=questions.map((q,i)=>`<tr><td>${i+1}</td><td>${"ABCD"[answers[i].chosen]}</td><td>${"ABCD"[q.c]}</td><td>${answers[i].correct?'✓':'✗'}</td></tr>`).join('');
+ document.getElementById('review').innerHTML=`<h3>答题回顾</h3><table><thead><tr><th>题号</th><th>你的答案</th><th>参考答案</th><th>结果</th></tr></thead><tbody>${rows}</tbody></table>`;
+ document.getElementById('bar').style.width='100%';
+ document.getElementById('progressText').textContent='练习完成';
+}
+function restart(){current=0;score=0;answers=[];document.getElementById('result').style.display='none';document.getElementById('quiz').style.display='block';render();}
+render();
+</script>
+</body>
+</html>
